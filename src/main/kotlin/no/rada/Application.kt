@@ -15,6 +15,7 @@ private fun Application.settOppRouting(){
     routing {
         get {
             call.respond(status = HttpStatusCode.Accepted, message = "Hello world!")
+
         }
     }
 }
