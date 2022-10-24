@@ -15,7 +15,7 @@ fun Route.vanningController(
         post {
             try {
                 val mengdeVann = call.parameters["mengde"]!!.toDouble()
-                logger.info("Forespørsel om å vanne plante med $mengdeVann dl vann")
+                logger.info("Forespørsel om å vanne med $mengdeVann dl.")
                 vanningService.vannPlante(mengdeVann)
                 call.respond(HttpStatusCode.Accepted)
             } catch (e: Exception) {
