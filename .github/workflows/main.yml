@@ -1,0 +1,42 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+      - 'dev-**'
+    paths-ignore:
+      - 'README.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3.0.2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3.4.1
+        with:
+          java-version: 17
+          distribution: 'zulu'
+          cache: 'gradle'
+      - name: Test Code
+        run: ./gradlew check
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build JAR
+        run: ./gradlew buildFatJar
+
+      - name: Configure AWS credentials
+        id: aws-credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
